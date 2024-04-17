@@ -1,0 +1,40 @@
+﻿@model IEnumerable<WebApplication2.Models.Book>
+
+@{
+    ViewData["Title"] = "Каталог";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Каталог</h1>
+<h5>За последние @ViewData["TrackingTimeInMinutes"] минут эту страницу посетили @ViewData["VisitCount"] раз!</h5>
+<h5>Лично Вы за последние @ViewData["TrackingTimeInMinutes"] минут посетили страницу @ViewData["cookieVisitCount"] раз. Последний раз был в @ViewData["LastVisit"]</h5>
+
+<div class="row">
+    @foreach (var book in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="~/images/@Html.DisplayFor(modelItem => book.ImagePath)" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title">@Html.DisplayFor(modelItem => book.Title)</h5>
+                    <p class="card-text">@Html.DisplayFor(modelItem => book.Description)</p>
+                    <p class="card-text">В наличии: @Html.DisplayFor(modelItem => book.Count)шт.</p>
+                    <form asp-controller="Home" asp-action="Catalog" method="post">
+                        <input type="hidden" name="bookId" value="@book.Id" />
+
+                        @if(book.Count <= 0)
+                        {
+                            <input type="submit" value="Купить" class="btn btn-primary" disabled/>
+                        }
+                        else
+                        {
+                            <input type="submit" value="Купить" class="btn btn-primary" />
+                        }
+                    
+                    </form>
+                    <a class="nav-link text-dark" asp-controller="Books" asp-action="Details" asp-route-id="@book.Id">Детали</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
